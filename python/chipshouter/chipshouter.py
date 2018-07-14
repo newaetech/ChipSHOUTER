@@ -30,7 +30,9 @@
     PyChipSHOUTER allows you to / get options / set options via this API.
     
     Using the ChipSHOUTER requires you to:
-       (a) configure settings
+       (a) configure settings:
+             (1) Capacitor bank voltage
+             (2) Pulse widths, settings (if using internal pulse generator)
        (b) arm the device using:
              (1) front-panel button, or
              (2) sending arm command, or
@@ -45,7 +47,7 @@
     change voltage between 150-500V, and more!
 
     Example
-    =======
+    -------
     Below is an example of arming / pulse and then disarm.
 
     >>> from chipshouter import ChipSHOUTER
@@ -412,6 +414,7 @@ class ChipSHOUTER(DisableNewAttr):
         :Types:
             - **probe**       - Probe connection is not connected properly.
             - **overtemp**    - One of the temperature sensors has gone over 80C
+            
                                 **Note:** *This will not recover until temperature
                                 goes below 70C.*
             - **open**        - The case is open.
@@ -420,8 +423,8 @@ class ChipSHOUTER(DisableNewAttr):
             - **eecrc**       - EEPROM corruption has occured.
             - **gpio**        - GPIO mismatch between a requested value and actual.
             - **charge**      - Charge circuit error, or 19V input out-of-range (including brown-out).  
-            - **trigger**     - Trigger occured while disarmed.
-                            Trigger for too long (More than 10msec)
+            - **trigger**     - Trigger occured while disarmed or external hardware trigger
+              help active for too long (More than 10msec)
             - **hw**          - Hardware monitor detected unspecified hardware fault.
             - **trig_g**      - Trigger was attempted while device disarmed.
             - **overvoltage** - Charge circuit error, over-voltage on HV output detected.
@@ -665,10 +668,11 @@ class ChipSHOUTER(DisableNewAttr):
         Pin 12 (external enable input) on the RJ12 connector can be 'arm' or 'fire'.
         
         In 'arm' mode:
+        
             When the external IO is set to high it will attempt arm the system.
-                **Note:**
-                * The system may not be armed because of a fault.*
-                * The status Led on the connector will indicate the arm status.*
+            
+                **Note:** The system may not be armed because of a fault. The
+                status Led on the connector will indicate the arm status.
 
             When the external IO is set to low it will disarm the system.
 
@@ -677,6 +681,7 @@ class ChipSHOUTER(DisableNewAttr):
             low and then high once again.
 
         In 'pulse' mode:
+        
             When external IO is set high the pulse command is executed. This is
             equivalent to hitting the pulse button on the front panel. Note this
             is NOT the hardware trigger, as it is only executing the pulse
@@ -740,8 +745,8 @@ class ChipSHOUTER(DisableNewAttr):
         """The wave used for the pattern trigger when pat_enable is 'True'.
         
         **NOTE**: You **MUST** end the pattern with an inactive value,
-          which will depend on the setting of hwtrig_mode . Normally
-          this means ensuring you end with a '0' or 'False'.
+        which will depend on the setting of hwtrig_mode . Normally
+        this means ensuring you end with a '0' or 'False'.
         
         For example, setting a pattern of [1,1,1,0,0,0,1,1,1,1,0,0,0,0]::
         
@@ -753,6 +758,9 @@ class ChipSHOUTER(DisableNewAttr):
                     | | | | | | | | | | | | | | |
             Time:   20  60  00  40  80  20  60  
              (nS)     40  80  20  60  00  40  80
+             
+        See the ChipSHOUTER manual specifications for details of the maximum
+        wave length and exact time-step size.             
         """
 
         return self.com_api.get_pat_wave()

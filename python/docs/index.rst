@@ -1,6 +1,6 @@
 .. |ChipSHOUTER| unicode:: ChipSHOUTER U+00AE
 
-Welcome to the |ChipSHOUTER| Python API Documentation
+|ChipSHOUTER| Python API Documentation
 =====================================================
 
 |ChipSHOUTER| is an EMFI tool by NewAE Technology Inc. You can find more information about ChipSHOUTER at `ChipSHOUTER.com <http://chipshouter.com/>`_. Note this documentation is only the Python API (which you install with pip install chipshouter) . You will likely need the full user manual on ChipSHOUTER.com, also mirrored in PDF to the `ChipSHOUTER GIT Repo <https://www.github.com/newaetech/ChipSHOUTER/>`_.
