@@ -1,41 +1,67 @@
+#
+# This file is part of the ChipSHOUTER Python API.
+# Copyright NewAE Technology Inc., 2017-2018.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+# ChipSHOUTER is a registered trademark of NewAE Technology Inc.
+#
+
 '''
-    Shouter_API will allow you to connect / get options / set options
+    ChipSHOUTER API Documentation
+    =============================
+    
+    PyChipSHOUTER allows you to / get options / set options via this API.
+    
+    Using the ChipSHOUTER requires you to:
+       (a) configure settings
+       (b) arm the device using:
+             (1) front-panel button, or
+             (2) sending arm command, or
+             (3) external IO pin on RJ12
+       (c)  Triggering the pulse using:
+             (1) the pulse front-panel button, or
+             (2) the pulse command, or
+             (3) external IO pin on RJ12, or
+             (4) external hardware trigger
 
-    The High voltage pulses can be up to 500 volts and triggered at as low as 20ns.
-    The Unit needs to be armed before any triggering of the high voltage by the user.
-
-    The Unit can be Armed by:
-
-    1. User pressing the Arm button.
-    2. User sending the arm command through the computer.
-    3. User toggling the enable IO on the DB9 Connector. (Unit configuration must have this enabled)
-
-    The voltage and timing are configurable through the computer interface. This give the user the ability
-    to fine tune the device to find the optimum settings to corrupt the target.
+    This API allows you to fine-tune the pulse settings, generate special waveforms,
+    change voltage between 150-500V, and more!
 
     Example
     =======
     Below is an example of arming / pulse and then disarm.
 
-    >>> import time
-    >>> from shouter.shouter_api import Shouter_API
-    >>>
-    >>> s = Shouter_API()
-    >>> s.ctl_connect('COM10')
-    >>> # Arming
-    >>> s.cmd_arm()
-    >>> time.sleep(3)
-    >>> # Trigger
-    >>> s.cmd_pulse()
-    >>> # Disarm
-    >>> s.cmd_disarm()
-    >>> # Disconnect
-    >>> s.ctl_disconnect()
-    >>> # Done
+    >>> from chipshouter import ChipSHOUTER
+    >>> cs = ChipSHOUTER('COM12')
+    >>> print cs #get all values of device
+    >>> cs.voltage = 500
+    >>> cs.pulse.width = 180
+    >>> cs.arm = 1
+    >>> cs.pulse = 1
+    >>> cs.pat_wave = [0,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0]
+    >>> cs.pat_enable = 1 #Turn on special pattern trigger
+    >>> cs.pulse = 1
+    >>> cs.arm = False #Can use true/false or 1/0
 
 '''
 from collections import OrderedDict
-#from shouter_api import Shouter_API
 from com_tools import Bin_API
 
 class DisableNewAttr(object):
@@ -175,7 +201,8 @@ class PulseSettings(DisableNewAttr):
 
     @property
     def width(self):
-        """ Width of the pulse"""
+        """ Basic pulse generator: Requested pulse width in nS,
+        check the measured result to see actual possible setting"""
         rval = self.api.get_pulse_width(5)
         return rval
 
@@ -186,26 +213,28 @@ class PulseSettings(DisableNewAttr):
 
     @property
     def repeat(self):
-        """This is amazing"""
+        """Number of pulses per trigger, the trigger being
+        the `pulse` command, the front-panel button, or the
+        RJ12 firmware pulse pin when enabled.
+        """
         rval = self.api.get_pulse_repeat(5)
         return rval
 
     @property
     def measured(self):
-        """ Get the Measured pulse width """
+        """Basic pulse generator: actual pulse width in nS"""
 
         rval = self.api.get_pulse_width_measured(1)
         return rval
 
     @repeat.setter
     def repeat(self, repeat):
-        print 'Setting repeat!!'
         rval = self.api.set_pulse_repeat(repeat)
         return repeat
 
     @property
     def deadtime(self):
-        """ Get the deadtime """
+        """ Time between pulses in mS """
         rval = self.api.get_pulse_deadtime(5)
         return rval
 
@@ -234,10 +263,11 @@ class ChipSHOUTER(DisableNewAttr):
     ChipSHOUTER object.
 
     The ChipSHOUTER will attempt to connect when initialzed.
-    This Object will contain all the status of the chipshouter connected.
-    You will be able probe for status and control the status of the shouter.
+    This Object will contain all the status of the ChipSHOUTER connected.
+    You will be able probe for status and control the status of the
+    ChipSHOUTER.
 
-    :param comport: (String): The serial port that the ChipShouter is 
+    :param comport: (String): The serial port that the ChipSHOUTER is 
                               connected.
 
     """
@@ -257,7 +287,7 @@ class ChipSHOUTER(DisableNewAttr):
         self.disable_newattr()
 
     def status(self):
-        """ This will indicate the status of the connection to the chipshouter.
+        """ This will indicate the status of the connection to the ChipSHOUTER.
 
         :returns:    (bool):   True if connected successfully. False if not.
 
@@ -265,7 +295,7 @@ class ChipSHOUTER(DisableNewAttr):
         return self.__connected
 
     def disconnect(self):
-        """ This will disconnect the connection from the chipshouter.
+        """ This will disconnect the connection from the ChipSHOUTER.
 
         :returns: (bool):  Status of the connection, True if connected 
                            successfully. False if not.
@@ -290,13 +320,13 @@ class ChipSHOUTER(DisableNewAttr):
             :returns: The set voltage
 
         :Member (Read only): .measured - This is the actual voltage that is
-            put out of the chip shouter.
+            put out of the ChipSHOUTER.
 
             :returns: The measured voltage
 
         :Example:
 
-            >>> from API import ChipSHOUTER
+            >>> from chipshouter import ChipSHOUTER
             >>> cs = ChipSHOUTER('COM10')
             Serial Interface Started
             Shouter API Started
@@ -324,6 +354,43 @@ class ChipSHOUTER(DisableNewAttr):
 
     @property
     def pulse(self):
+        """ Sets parameters for the pulse generator and causes the pulse
+        to be triggered.
+        
+        :param pulse: (bool): When set to True causes a pulse to occur.
+        
+        The settings of the basic pulse generator is done as follows::
+        
+                  _________________________________________ repeat (3)
+                 |                  |                  |
+                 v                  v                  v
+               ____               ____               ____
+            __|    |_____________|    |_____________|    |____________
+                ^       ^
+                |        \__ Dead time
+                |___ pulse width 
+        
+        :Member: .deadtime: (int): - Time between pulses in mS
+            
+        :Member: .repeat: (int): - Number of pulses per trigger, the
+               trigger being the `pulse` command, the front-panel button,
+               or the RJ12 firmware pulse pin when enabled.
+
+        :Member: .width: (int): - Basic pulse generator: Requested pulse
+                width in nS, check the measured result to see actual
+                possible setting.
+                
+        :Member: .measured: (int): - Basic pulse generator: actual pulse
+                width in nS.
+                
+        :Example:
+            >>> cs = ChipSHOUTER('COM10')     # Connect to shouter
+            >>> cs.pulse.width = 120 #120 nS pulse width
+            >>> cs.pulse.repeat = 5 #5 pulses
+            >>> cs.pulse.deadtime = 15 #15mS deadtime
+            >>> cs.pulse = 1 #Trigger a pulse
+                
+        """
         return self._pulse
 
     @pulse.setter
@@ -344,21 +411,21 @@ class ChipSHOUTER(DisableNewAttr):
 
         :Types:
             - **probe**       - Probe connection is not connected properly.
-            - **overtemp**    - One of the temperature sensors has gone over 90C
+            - **overtemp**    - One of the temperature sensors has gone over 80C
                                 **Note:** *This will not recover until temperature
-                                goes below 75C.*
+                                goes below 70C.*
             - **open**        - The case is open.
-            - **highv**       - The high voltage circuit is off by way too much. 
-            - **ramcrc**      - Noise has corrupted some internal ram of the shouter.
-            - **eecrc**       - Noise has corrupted some internal eeprom of the shouter.
-            - **gpio**        - Noise has corrupted some internal gpio registers.
-            - **charge**      - Some faults with the high voltage circuitry.  
+            - **highv**       - Measured high voltage disagrees with requested by too much. 
+            - **ramcrc**      - RAM corrution has occured.
+            - **eecrc**       - EEPROM corruption has occured.
+            - **gpio**        - GPIO mismatch between a requested value and actual.
+            - **charge**      - Charge circuit error, or 19V input out-of-range (including brown-out).  
             - **trigger**     - Trigger occured while disarmed.
                             Trigger for too long (More than 10msec)
-            - **hw**          - Hardware monitor detected faulty hardware.
-            - **trig_g**      - Trigger has been glitched
-            - **overvoltage** - Hardware reported overvoltage on charging. 
-            - **temp_sensor** - Problems reading temperature sensor.
+            - **hw**          - Hardware monitor detected unspecified hardware fault.
+            - **trig_g**      - Trigger was attempted while device disarmed.
+            - **overvoltage** - Charge circuit error, over-voltage on HV output detected.
+            - **temp_sensor** - Temperature sensor has failed to read correctly for too long.
 
         :Example:
             >>> cs = ChipSHOUTER('COM10')     # Connect to shouter
@@ -443,7 +510,7 @@ class ChipSHOUTER(DisableNewAttr):
     @property
     def clr_armed(self):
         """
-        This is the control of the armed status.
+        Clear faults and then arm in one command.
 
         :Returns (bool): - When read it will show True when armed, False if not. 
 
@@ -494,14 +561,14 @@ class ChipSHOUTER(DisableNewAttr):
     @property
     def temperature_mosfet(self):
         """
-        Read the temperature of the mosfet.
+        Read the temperature of the MOSFET.
         """
         return self.com_api.get_temperature_mosfet()
 
     @property
     def temperature_diode(self):
         """
-        Read the temperature of the diode.
+        Read the temperature of the catch diode.
 
         :Returns (int): temperature
         """
@@ -510,7 +577,7 @@ class ChipSHOUTER(DisableNewAttr):
     @property
     def temperature_xformer(self):
         """
-        Read the temperature of the Transformer.
+        Read the temperature of the transformer.
 
         :Returns (int): temperature
         """
@@ -519,23 +586,23 @@ class ChipSHOUTER(DisableNewAttr):
     @property
     def id(self):
         """
-        Read the board id. 
+        Read the board id. This board id is needed for firmware updates to
+        get the encrypted/signed firmware file.
 
-        :Returns (string): The string id of the Chip shouter. 
+        :Returns (string): The string id of the ChipSHOUTER.
         """
         return self.com_api.get_id()
 
     @property
     def arm_timeout(self):
         """ Arm timeout 
-        Because of safty reasons we will monitor the trigger when in the armed
-        state. The trigger needs to be activated within the timeout programmed.
-        Every trigger will reset the timer with every pulse.
+        For safety reasons and to reduce heat generation, the ChipSHOUTER will
+        automatically disarm after a specific number of minutes. If the time
+        out occurs, the ChipSHOUTER will disarm and disable the high voltage
+        circuitry.
 
-        If the time out occurs, the shouter will disarm and disable the high
-        voltage circuitry.
-
-        The Arm timer will be reset on every trigger / internal or external.
+        The arm timer will be reset on every pulse trigger (internal or external).
+        Thus if you are actively using the ChipSHOUTER it should not disarm on you.
 
         **NOTE** Valid range is between 1 - 60 minutes
 
@@ -548,11 +615,21 @@ class ChipSHOUTER(DisableNewAttr):
 
     @arm_timeout.setter
     def arm_timeout(self, value):
-        """ Arm timeout setter """
         return self.com_api.set_arm_timeout(value)
 
     @property
     def hwtrig_term(self):
+        """ Hardware Trigger Input termination mode.
+        Configure hardware trigger (SMB connector) as high impedance ('False') or
+        50-ohm ('True'). The 50-Ohm impedance option puts a 50R resistor to ground.
+        If you are not using the hardware trigger it is suggested to set this True,
+        as it will reduce potential noise on the hardware trigger causing glitches.
+        
+        :param value: (bool): True (50-ohm) or False (approx 1.8K-ohm) impedance.
+        
+        :Returns (bool): State of the termination.
+        
+        """
         return self.com_api.get_hwtrig_term()
 
     @hwtrig_term.setter
@@ -561,6 +638,21 @@ class ChipSHOUTER(DisableNewAttr):
 
     @property
     def hwtrig_mode(self):
+        """ Trigger Polarity (Active-high vs Active-low)
+        Configure hardware trigger (SMB connector) as active high or active low.
+        When configured as active low ensure the pin is externally driven high
+        during operation to prevent false triggers.
+        
+        This command switches the entire internal trigger logic. When switching
+        hwtrig_mode and using the pattern trigger, you will need to invert the
+        pattern trigger logic.
+        
+        :param value: (bool): True (active-high) or False (active-low) mode.
+        
+        :Returns (bool): State of the termination.
+        
+        """
+
         return self.com_api.get_hwtrig_mode()
 
     @hwtrig_mode.setter
@@ -570,21 +662,27 @@ class ChipSHOUTER(DisableNewAttr):
     @property
     def emode(self):
         """
-        emode when set will enable the external arming of the system through
-        the external IO.
+        Pin 12 (external enable input) on the RJ12 connector can be 'arm' or 'fire'.
+        
+        In 'arm' mode:
+            When the external IO is set to high it will attempt arm the system.
+                **Note:**
+                * The system may not be armed because of a fault.*
+                * The status Led on the connector will indicate the arm status.*
 
-        When the external IO is set to high it will attempt arm the system.
-            **Note:**
-            * The system may not be armed because of a fault.*
-            * The status Led on the connector will indicate the arm status.*
+            When the external IO is set to low it will disarm the system.
 
-        When the external IO is set to low it will disarm the system.
+            The External IO reacts to the state change and not the static state.
+            If the System fails to arm, to attempt again it needs to pull the line
+            low and then high once again.
 
-        The External IO reacts to the state change and not the static state.
-        If the System fails to arm, to attempt again it needs to pull the line
-        low and then high once again.
+        In 'pulse' mode:
+            When external IO is set high the pulse command is executed. This is
+            equivalent to hitting the pulse button on the front panel. Note this
+            is NOT the hardware trigger, as it is only executing the pulse
+            command and not directly driving the MOSFET itself.
 
-        :param state: (bool): True to enable False to disable. 
+        :param state: (bool): True (firmware trigger mode) or False (arm mode)
 
         :Returns: The state of the emode. 
 
@@ -597,10 +695,9 @@ class ChipSHOUTER(DisableNewAttr):
 
     @property
     def mute(self):
-        """ mute when enabled will not give audio notification of the state or
-        fault status. It is totally quiet.
+        """ Mute the audio output, preventing beeping and fault tones.
 
-        :param state: (bool): True to enable False to disable. 
+        :param state: (bool): True (mute = On, thus no noise) or False
         """
         return self.com_api.get_mute()
 
@@ -609,15 +706,29 @@ class ChipSHOUTER(DisableNewAttr):
         return self.com_api.set_mute(value)
 
     @property
-    def absentTemp(self):
+    def absent_temp(self):
+        """Configure maximum time the temperature sensors can be skipped for.
+        The temperature sensors cannot be read during pulse events, and
+        the ChipSHOUTER keeps a timer of how old the last temperature reading
+        is.
+        
+        The timer is reset during routine self-checks (if triggers are not
+        coming in quickly), or in response to the triggersafe command.
+        
+        :param value: (int) Time in seconds
+        """
+
         return self.com_api.get_absentTemp()
 
-    @absentTemp.setter
-    def absentTemp(self, value):
+    @absent_temp.setter
+    def absent_temp(self, value):
         return self.com_api.set_absentTemp(value)
 
     @property
     def pat_enable(self):
+        """Enable the pattern trigger, if not set to True then the basic
+           trigger is used instead.
+        """
         return self.com_api.get_pat_enable()
 
     @pat_enable.setter
@@ -626,6 +737,24 @@ class ChipSHOUTER(DisableNewAttr):
 
     @property
     def pat_wave(self):
+        """The wave used for the pattern trigger when pat_enable is 'True'.
+        
+        **NOTE**: You **MUST** end the pattern with an inactive value,
+          which will depend on the setting of hwtrig_mode . Normally
+          this means ensuring you end with a '0' or 'False'.
+        
+        For example, setting a pattern of [1,1,1,0,0,0,1,1,1,1,0,0,0,0]::
+        
+            Pattern  1 1 1 0 0 0 1 1 1 1 0 0 0 0 
+                     _ _ _       _ _ _ _        
+            Trigger |     |_ _ _|       |_ _ _ _
+
+                    ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
+                    | | | | | | | | | | | | | | |
+            Time:   20  60  00  40  80  20  60  
+             (nS)     40  80  20  60  00  40  80
+        """
+
         return self.com_api.get_pat_wave()
 
     @pat_wave.setter
@@ -634,6 +763,7 @@ class ChipSHOUTER(DisableNewAttr):
 
     @property
     def reset(self):
+        """Set to True causes a hardware reset."""
         return 0
     @reset.setter
     def reset(self, value):
@@ -653,6 +783,7 @@ class ChipSHOUTER(DisableNewAttr):
 
     @property
     def reset_config(self):
+        """Set to 'True' resets all configuration values to default (pulse width etc)."""
         return 0
 
     @reset_config.setter
