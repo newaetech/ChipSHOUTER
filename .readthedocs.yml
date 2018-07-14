@@ -3,6 +3,8 @@
 build:
   image: latest
 
+requirements_file: python/requirements.txt
+
 python:
   version: 2.7
   setup_py_install: false
