@@ -1,3 +1,6 @@
 [submodule "python"]
 	path = python
 	url = https://github.com/newaetech/ChipSHOUTER-python
+[submodule "ChipSHOUTER-target-simple"]
+	path = ChipSHOUTER-target-simple
+	url = https://github.com/newaetech/ChipSHOUTER-target-simple
