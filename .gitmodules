@@ -4,3 +4,6 @@
 [submodule "ChipSHOUTER-target-simple"]
 	path = ChipSHOUTER-target-simple
 	url = https://github.com/newaetech/ChipSHOUTER-target-simple
+[submodule "ChipSHOUTER-ballisticgel"]
+	path = ChipSHOUTER-ballisticgel
+	url = https://github.com/newaetech/ChipSHOUTER-ballisticgel.git

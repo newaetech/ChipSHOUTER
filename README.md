@@ -24,7 +24,7 @@ Currently there is two main sources of documentation:
 
 ## What makes ChipSHOUTER® Awesome
 
-ChipSHOUTER not only reduces the cost of EMFI research, it packages a complete learning environment. We include not only the injection tool, but different tips and target devices to help you understand the effects of EMFI.
+ChipSHOUTER not only reduces the cost of EMFI research, it packages a complete learning environment. We include not only the injection tool, but different tips and target devices to help you understand the effects of EMFI. This includes a simple EMFI target to get you up and running, and the complex Ballistic Gel to help you understand what different injection waveforms and tip parameters mean for the resulting injected faults. 
 
 ## Buying a ChipSHOUTER®
 
