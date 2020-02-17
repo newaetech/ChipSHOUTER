@@ -17,3 +17,5 @@ https://a360.co/2vIFLQQ
 
 You can download this file in various formats from:
 https://a360.co/37BaIUu
+
+Note this has four M4x0.7 holes which hold the top U-mount onto the bottom plate. You will need appropriate M4 holes if you follow this same design.
