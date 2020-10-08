@@ -11,7 +11,7 @@ The full ChipSHOUTER is not OSHW, there are several repositories containing usef
 
 * Simple EMFI Target: A very simple EMFI target, useful for quickly confirming an EMFI system is working. As it's completely stand-alone there is little risk of damaging connected devices, if you are trying things like spark-gap EMFI using a BBQ lighter.
 
-* ChipSHOVER is a XY(Z) table and controller. Note controller for this has fully open-source firmware, allowing you to develop unique extensions to the platform (nb: not yet released).
+* ChipShover is a XYZ table and controller. Note controller for this has fully open-source firmware, allowing you to develop unique extensions to the platform (nb: not yet released).
 
 Parts of this repository have different licenses as noted in the files. The Python API is open-source for example under the MIT license.
 
@@ -28,7 +28,7 @@ ChipSHOUTER not only reduces the cost of EMFI research, it packages a complete l
 
 ## Buying a ChipSHOUTER®
 
-ChipSHOUTER is currently in preorder, see the [NewAE Store for Pre-order](http://store.newae.com/chipshouter-kit/).
+ChipSHOUTER is currently available, see it on Mouser or in the [NewAE Store for Pre-order](http://store.newae.com/chipshouter-kit/).
 
 ## Disclaimers
 
