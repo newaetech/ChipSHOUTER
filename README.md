@@ -5,7 +5,7 @@ ChipSHOUTER® - The Electromagnetic Fault Injection (EMFI) Platform By NewAE Tec
 
 ## Open-Source and Associated Tools
 
-The full ChipSHOUTER is not OSHW, there are several repositories containing useful open-source tools that can be used with ChipSHOUTER and other EMFI platforms. These include:
+The full ChipSHOUTER is not OSHW, but at least the [schematic is published](documentation/NPCA-CW520-ChipSHOUTER-07_Schematic.pdf) along with some details in the [user manual](https://github.com/newaetech/ChipSHOUTER/raw/master/documentation/ChipSHOUTER%20User%20Manual.pdf). In addition, there are several repositories containing useful open-source tools that can be used with ChipSHOUTER and other EMFI platforms. These include:
 
 * Ballistic Gel: a SRAM-based calibration board that can be used to measure the impact of EM (or other) fault injection. This is especially useful when comparing probe tip types.
 
@@ -28,7 +28,7 @@ ChipSHOUTER not only reduces the cost of EMFI research, it packages a complete l
 
 ## Buying a ChipSHOUTER®
 
-ChipSHOUTER is currently available, see it on Mouser or in the [NewAE Store for Pre-order](http://store.newae.com/chipshouter-kit/).
+ChipSHOUTER is currently available, see it on Mouser or in the [NewAE Store](http://store.newae.com/chipshouter-kit/). Availability varies - contact for details.
 
 ## Disclaimers
 
