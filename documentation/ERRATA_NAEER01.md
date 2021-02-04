@@ -41,7 +41,9 @@ The repaired units (as well as newly built units) use a different part with impr
 
 ## Notes
 
-The two output resistors are designed such the high-side resistor will fail first, and serves as a "last resort fuse" designed to protect the more difficult to repair portions. Due to component availability issues a substitution was made on the resistor when the ChipSHOUTERs were first produced, and that substitution has continued in all production units. When the substitution was selected, it had more limited manufacture provided pulse power ratings than our desired part, but testing showed it seems to work OK with a sufficiently happy margin.
+The two output resistors are designed such the high-side resistor will fail first, and serves as a "last resort fuse" designed to protect the more difficult to repair portions. Due to component availability issues a substitution was made on the resistor when the ChipSHOUTERs were first produced, and that substitution has continued in all production units. When the substitution was selected, it had more limited manufacture provided pulse power ratings than our desired part, but testing showed it seems to work OK with a sufficiently happy margin. We perform extended temperature testing (a special ChipSHOUTER firmware disables the normal "high temp shutdown") to test >100C while discharging into a direct short as the output.
+
+<img src="images\ER01_TestingProduction.jpg">
 
 The problem appears more prevalent in a later date code for these specific resistors, suggesting the initial validation may have been done on what happened to be a "better" batch. ChipSHOUTERs with the issue have all had resistor datecode `2027` (this will not be visible until the unit is opened and parts of the coating removed).
 
