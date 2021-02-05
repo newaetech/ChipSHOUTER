@@ -45,6 +45,8 @@ The two output resistors are designed such the high-side resistor will fail firs
 
 <img src="images\ER01_TestingProduction.jpg">
 
-The problem appears more prevalent in a later date code for these specific resistors, suggesting the initial validation may have been done on what happened to be a "better" batch. ChipSHOUTERs with the issue have all had resistor datecode `2027` (this will not be visible until the unit is opened and parts of the coating removed).
+The problem appears "more" prevalent in a later date code for these specific resistors, suggesting the initial validation may have been done on what happened to be a "better" batch. ChipSHOUTERs with the issue have all had resistor datecode `2027` (this will not be visible until the unit is opened and parts of the coating removed).
+
+So far the failure rate we have seen is low (1-2%), but before this batch we had never seen this specific failure.
 
 All repaired units & all new units use a part from another manufacture & product family that is fully specified at our pulse widths & power levels. This was the *originally specified part* from our design, which at the time was unavailable. We have now horded these resistors to ensure we don't need to substitute them in the future.
