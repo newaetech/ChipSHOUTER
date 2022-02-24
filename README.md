@@ -32,7 +32,7 @@ ChipSHOUTER is currently available, see it on Mouser or in the [NewAE Store](htt
 
 ## Firmware Updates
 
-The latest version of the ChipSHOUTER firmware along with a description of how to update it can be seen in the [Firmware Update](https://github.com/newaetech/ChipSHOUTER/master/documentation/Firmware Update.md) file.
+The latest version of the ChipSHOUTER firmware along with a description of how to update it can be seen in the [Firmware Update](https://github.com/newaetech/ChipSHOUTER/master/documentation/Firmware%20Update.md) file.
 
 ## Disclaimers
 
