@@ -30,6 +30,10 @@ ChipSHOUTER not only reduces the cost of EMFI research, it packages a complete l
 
 ChipSHOUTER is currently available, see it on Mouser or in the [NewAE Store](http://store.newae.com/chipshouter-kit/). Availability varies - contact for details.
 
+## Firmware Updates
+
+The latest version of the ChipSHOUTER firmware along with a description of how to update it can be seen in the [Firmware Update](documentation/Firmware Update.md) file.
+
 ## Disclaimers
 
 Specifications are subject to change without notice. All product names are trademarks of their respective companies. ChipSHOUTER is a registered trademark of NewAE Technology Inc.
