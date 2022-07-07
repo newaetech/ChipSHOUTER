@@ -6,6 +6,8 @@ The firmware update file is downloaded from the following URL: https://media.new
 
 You need to replace XXXXXX with the board id.
 
+You can perform the firmware update with the `update_firmware()` function: https://chipshouter.readthedocs.io/en/latest/#chipshouter.chipshouter.ChipSHOUTER.update_firmware
+
 ## Firmware Update Releases
 
 ### 2.0.3
