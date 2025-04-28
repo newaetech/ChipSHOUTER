@@ -6,7 +6,24 @@ The firmware update file is downloaded from the following URL: https://media.new
 
 You need to replace XXXXXX with the board id.
 
-You can perform the firmware update with the `update_firmware()` function: https://chipshouter.readthedocs.io/en/latest/#chipshouter.chipshouter.ChipSHOUTER.update_firmware
+### Updating Firmware
+
+If your ChipSHOUTER is already programmed, connect and run the `update_firmware()` function to reprogram your device:
+
+```python
+from chipshouter import ChipSHOUTER
+cs = ChipSHOUTER('<SERIAL_PORT>')
+cs.update_firmware('/path/to/firmware.fup')
+```
+
+If your ChipSHOUTER is in bootloader mode (it's printing out its board id over the serial port), run the following to reprogram:
+
+```python
+from chipshouter import ChipSHOUTER
+ChipSHOUTER.update_firmware(None, "/path/to/firmware.fup", comport="<SERIAL_PORT>")
+```
+
+Documentation for the `update_firmware()` function can be found here: https://chipshouter.readthedocs.io/en/latest/#chipshouter.chipshouter.ChipSHOUTER.update_firmware
 
 ## Firmware Update Releases
 
